@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    //layout colored with blue background
+    <RelativeLayout
+        android:id="@+id/outerRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:background="@color/colorBackground"
+        tools:context=".RegisterActivity"
+        tools:ignore="MissingConstraints">
+
+        //profile picture circle view
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImage_profile"
+            android:layout_width="93dp"
+            android:layout_height="84dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/profile" />
+
+    </RelativeLayout>
+
+    //layout colored with Ehite background
+    <RelativeLayout
+        android:id="@+id/lowerRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="390dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints">
+
+        //Layout with person name Icon and text field
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_vertical_margin_of_linearview"
+            android:layout_marginTop="5dp"
+            android:background="@color/colorWhiteGray">
+
+            <ImageView
+                android:id="@+id/personIcon_profile"
+                app:srcCompat="@drawable/ic_person_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_of_icon"
+                android:layout_marginTop="@dimen/activity_vertical_margin_of_icon"/>
+
+            <TextView
+                android:id="@+id/CNICEditTextID_profile"
+                android:layout_width="320dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_of_textView"
+                android:padding="10dip"
+                android:layout_marginTop="@dimen/activity_textfield_margin_from_top"
+                android:textColor="#000000"
+                android:textSize="@dimen/activity_text_size" />
+        </LinearLayout>
+
+        //Layout with CNIC Icon and text field
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_vertical_margin_of_linearview"
+            android:layout_marginTop="60dp"
+            android:background="@color/colorWhiteGray">
+
+            <ImageView
+                android:id="@+id/phonNoIcon_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_of_icon"
+                app:srcCompat="@drawable/ic_call_black_24dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin_of_icon"/>
+
+            <TextView
+                android:id="@+id/phonNoID_profile"
+                android:layout_width="320dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_of_textView"
+                android:padding="10dip"
+                android:layout_marginTop="@dimen/activity_textfield_margin_from_top"
+                android:textColor="#000000"
+                android:textSize="@dimen/activity_text_size" />
+        </LinearLayout>
+
+        //Layout with phon Icon and text field
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_vertical_margin_of_linearview"
+            android:layout_marginTop="115dp"
+            android:background="@color/colorWhiteGray">
+
+            <ImageView
+                android:id="@+id/CNICIcon_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_of_icon"
+                app:srcCompat="@drawable/ic_email_black_24dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin_of_icon"/>
+
+            <TextView
+                android:id="@+id/passwordID_profile"
+                android:layout_width="320dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_of_textView"
+                android:padding="9dip"
+                android:layout_marginTop="@dimen/activity_textfield_margin_from_top"
+                android:textColor="#000000"
+                android:textSize="@dimen/activity_text_size" />
+        </LinearLayout>
+
+        //Layout with Address Icon and text field
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_vertical_margin_of_linearview"
+            android:layout_marginTop="170dp"
+            android:background="@color/colorWhiteGray">
+
+            <ImageView
+                android:id="@+id/AddressIcon_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_of_icon"
+                app:srcCompat="@drawable/ic_location_on_black_24dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin_of_icon"/>
+
+            <TextView
+                android:id="@+id/nameEditTextID_profile"
+                android:layout_width="320dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="@dimen/activity_textfield_margin_from_top"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_of_textView"
+                android:padding="10dip"
+                android:textColor="#000000"
+                android:textSize="@dimen/activity_text_size" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".DashBoardLayout">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/lifeGuardview"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:onClick="onClick"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.313">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/accidentCardView"
+            android:layout_width="80dp"
+            android:layout_height="79dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="18dp"
+            app:cardCornerRadius="15dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/accidentPic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/drowningteam" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/accidentTextView"
+            android:layout_width="107dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="110dp"
+            android:foregroundGravity="center"
+            android:text="Life guard"
+            android:textAlignment="center"
+            android:textColor="@color/design_default_color_on_secondary" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/AccidentrecoveryCardView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:onClick="onClick"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.888"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.311">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/AccidentrecoveryCard"
+            android:layout_width="80dp"
+            android:layout_height="79dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="18dp"
+            app:cardCornerRadius="15dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/fireteamPic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/medical" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/AccidentrecoveryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="110dp"
+            android:foregroundGravity="center"
+            android:text="Accident recovery"
+            android:textAlignment="center"
+            android:textColor="@color/design_default_color_on_secondary" />
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/leftLoweViewForMap"
+        android:onClick="onMapPress"
+        android:layout_width="191dp"
+        android:layout_height="65dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/right" />
+
+    <ImageView
+        android:id="@+id/rightLoweViewForCall"
+        android:onClick="call"
+        android:layout_width="191dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.933"
+        app:layout_constraintStart_toEndOf="@+id/leftLoweViewForMap"
+        app:srcCompat="@drawable/left" />
+
+    <ImageView
+        android:id="@+id/mapIcon"
+        android:layout_width="99dp"
+        android:layout_height="53dp"
+        android:src="@drawable/map"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/leftLoweViewForMap"
+        app:layout_constraintHorizontal_bias="0.26"
+        app:layout_constraintStart_toStartOf="@+id/leftLoweViewForMap"
+        app:layout_constraintTop_toTopOf="@+id/leftLoweViewForMap"
+        app:layout_constraintVertical_bias="0.97"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/callIcon"
+        android:layout_width="108dp"
+        android:layout_height="54dp"
+        android:src="@drawable/call"
+        app:layout_constraintBottom_toBottomOf="@+id/rightLoweViewForCall"
+        app:layout_constraintEnd_toEndOf="@+id/rightLoweViewForCall"
+        app:layout_constraintHorizontal_bias="0.77"
+        app:layout_constraintStart_toStartOf="@+id/rightLoweViewForCall"
+        app:layout_constraintTop_toTopOf="@+id/rightLoweViewForCall"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/fireCardView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:onClick="onClick"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.717">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/drowningImageCardViewID"
+            android:layout_width="80dp"
+            android:layout_height="79dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="18dp"
+            app:cardCornerRadius="15dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/drowningImageViewID"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/water" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/fireTextViewID"
+            android:layout_width="107dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="110dp"
+            android:foregroundGravity="center"
+            android:text="Fire brigade"
+            android:textAlignment="center"
+            android:textColor="@color/design_default_color_on_secondary" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/structureCollapseImageAndCardViewID"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:onClick="onClick"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.888"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.715">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/structureCollapseImageCardViewID"
+            android:layout_width="80dp"
+            android:layout_height="79dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="18dp"
+            app:cardCornerRadius="15dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/structureCollapseImageViewID"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:src="@drawable/buildingcollapsepng1" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/structureCollapseTextViewID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="110dp"
+            android:foregroundGravity="center"
+            android:text="Rescue service"
+            android:textAlignment="center"
+            android:textColor="@color/design_default_color_on_secondary" />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/complete"
+        android:layout_width="136dp"
+        android:layout_height="63dp"
+        android:onClick="onCompletePress"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.471"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.888">
+
+        <TextView
+            android:id="@+id/completeBtn"
+            android:layout_width="107dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="14dp"
+            android:foregroundGravity="center"
+            android:text="Complete "
+            android:textAlignment="center"
+            android:textColor="@color/design_default_color_on_secondary" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/availablityy"
+        android:layout_width="296dp"
+        android:layout_height="40dp"
+        android:foregroundGravity="center"
+        android:text="You are not available for any service"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.061" />
+
+    <TextView
+        android:id="@+id/advicee"
+        android:layout_width="308dp"
+        android:layout_height="39dp"
+        android:foregroundGravity="center"
+        android:text="Press button to make you available "
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.147" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
