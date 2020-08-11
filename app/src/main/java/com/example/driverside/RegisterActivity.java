@@ -51,6 +51,9 @@ public class RegisterActivity extends AppCompatActivity {
     private StorageReference mStorageRef;
 
     private TextView towardsLoginTextView;
+    private static final String TAG = "RegisterActivity";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +80,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
         };
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        mPostDatabase = FirebaseDatabase.getInstance().getReference().child("Caller Data");
+
+
+        mPostDatabase = FirebaseDatabase.getInstance().getReference("Caller Data");
 
         imageRegister = findViewById(R.id.profileImage_register);
         FullnameRegister = findViewById(R.id.nameEditTextID_register);
@@ -90,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
         towardsLoginTextView = (TextView) findViewById(R.id.towardsLoginTextView_register);
 
         towardsLoginTextView.setPaintFlags(towardsLoginTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-//        registerTextView.setText(Html.fromHtml("<u>underlined</u> text"));
+
         towardsLoginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,26 +117,33 @@ public class RegisterActivity extends AppCompatActivity {
         registerButtonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String email = emailRegister.getText().toString();
+                 String email = emailRegister.getText().toString();
                 final String password = passwordRegister.getText().toString();
+                final String mName = FullnameRegister.getText().toString().trim();
+                final String mNumber = phoneNumberRegister.getText().toString().trim();
+                final String maddress = addressRegister.getText().toString().trim();
+
 
                 if (email != null && password != null) {
+                    email = "res"+email;
                     if (!TextUtils.isEmpty(emailRegister.getText().toString())
-                            && !TextUtils.isEmpty(passwordRegister.getText().toString())) {
+                            && !TextUtils.isEmpty(passwordRegister.getText().toString()) && !TextUtils.isEmpty(mName) && !TextUtils.isEmpty(mNumber)
+                            && !TextUtils.isEmpty(maddress)) {
                         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (!task.isSuccessful()) {
-                                    Toast.makeText(RegisterActivity.this, "something went wrong here...", Toast.LENGTH_LONG)
+                                    Toast.makeText(RegisterActivity.this, "something wrong", Toast.LENGTH_LONG)
                                             .show();
-                                } else {
-                                    startPosting();
+                                } else { startPosting();
                                 }
                             }
                         });
                     } else {
-
+                        Toast.makeText(RegisterActivity.this,"Fill all field",Toast.LENGTH_LONG).show();
                     }
+                }else {
+                    Toast.makeText(getApplicationContext(),"Fill all field",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -155,45 +167,67 @@ public class RegisterActivity extends AppCompatActivity {
 
         final String mName = FullnameRegister.getText().toString().trim();
         final String mNumber = phoneNumberRegister.getText().toString().trim();
-        final String mEmail = emailRegister.getText().toString().trim();
+        String email = emailRegister.getText().toString().trim();
+        final String mEmail = "res"+email;
         final String maddress = addressRegister.getText().toString().trim();
-
-        mPostDatabase = FirebaseDatabase.getInstance().getReference().child("Caller Data").child(mNumber);
         if (!TextUtils.isEmpty(mName) && !TextUtils.isEmpty(mNumber)
-                && mImageUri != null && !TextUtils.isEmpty(maddress)){
+                && !TextUtils.isEmpty(maddress)) {
 
+            final int i = mEmail.indexOf(".");
 
             // start uploading...
-            StorageReference filepath = mStorageRef.child("Caller")
-                    .child(mImageUri.getLastPathSegment());
+            if (mImageUri == null) {
+                DatabaseReference newPost = mPostDatabase.child(mEmail.substring(0, i)).child("profile detail").child("wese");
+                Map<String, String> dataToSave = new HashMap<>();
+                dataToSave.put("phoneNumber", mNumber);
+                dataToSave.put("name", mName);
+                dataToSave.put("address", maddress);
+                dataToSave.put("email", mEmail);
+                dataToSave.put("image", "https://firebasestorage.googleapis.com/v0/b/rescue-1122-e6da7.appspot.com/o?name=Caller%20Data%2Fimage%3A4796&uploadType=resumable&upload_id=AAANsUm11ahQkw3Rqfcl-OP5n5j3U3rfSXv7hzN23NEZ6mJj-Ye2mquZ45ieglH_rwgV3R7UTR5V9TN-jfckgKO04-8&upload_protocol=resumable");
+                dataToSave.put("timeStamp", String.valueOf(java.lang.System.currentTimeMillis()));
+                //  dataToSave.put("userId", mUser.getUid());
 
-            filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                newPost.setValue(dataToSave);
+                mProgress.dismiss();
+                Toast.makeText(RegisterActivity.this, "registered ", Toast.LENGTH_LONG).show();
+                Intent ntent = new Intent(RegisterActivity.this, DashBoardLayout.class);
+                startActivity(ntent);
+                finish();
+            } else {
+                StorageReference filepath = mStorageRef.child("Caller Data")
+                        .child(mImageUri.getLastPathSegment());
+                filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        DatabaseReference newPost = mPostDatabase.child("res"+(mEmail.substring(0, i))).child("profile detail").child("wese");
+                        Map<String, String> dataToSave = new HashMap<>();
+                        dataToSave.put("phoneNumber", mNumber);
+                        dataToSave.put("name", mName);
+                        dataToSave.put("address", maddress);
+                        dataToSave.put("email", mEmail);
+                        dataToSave.put("image", (taskSnapshot.getUploadSessionUri()).toString());
+                        dataToSave.put("timeStamp", String.valueOf(java.lang.System.currentTimeMillis()));
+                        //  dataToSave.put("userId", mUser.getUid());
 
-                    Uri downloadUrl = taskSnapshot.getUploadSessionUri();
-                    DatabaseReference newPost = mPostDatabase.push();
+                        newPost.setValue(dataToSave);
+                        mProgress.dismiss();
+                        Toast.makeText(RegisterActivity.this, "registered ", Toast.LENGTH_LONG).show();
 
-                    Map<String, String> dataToSave = new HashMap<>();
-                    dataToSave.put("phoneNumber", mNumber);
-                    dataToSave.put("name", mName);
-                    dataToSave.put("address", maddress);
-                    dataToSave.put("email", mEmail);
-                    dataToSave.put("image", downloadUrl.toString());
-                    dataToSave.put("timeStamp", String.valueOf(System.currentTimeMillis()));
-//                    dataToSave.put("userId", mUser.getUid());
+                        Intent ntent = new Intent(RegisterActivity.this, DashBoardLayout.class);
+                        startActivity(ntent);
+                        finish();
+                    }
+                });
+            }
+//            gs://rescue-1122-e6da7.appspot.com/Caller%20Data/image%3A4796
+//            gs://rescue-1122-e6da7.appspot.com/Caller%20Data/image%3A4848
+//
+//                    if (imageRegister== null){
+//                         downloadUrls = ;
+//                    }else {
+//                        //Uri downloadUrl = taskSnapshot.getUploadSessionUri();
+//                    }
 
-                    newPost.setValue(dataToSave);
-                    mProgress.dismiss();
-                    Toast.makeText(RegisterActivity.this,"registered ",Toast.LENGTH_LONG).show();
-
-
-                    Intent ntent = new Intent(RegisterActivity.this, DashBoardLayout.class);
-                    ntent.putExtra("phone Number",mNumber);
-                    startActivity(ntent);
-                    finish();
-                }
-            });
         }else {
             Toast.makeText(RegisterActivity.this,"please Fill all field",Toast.LENGTH_LONG).show();
         }

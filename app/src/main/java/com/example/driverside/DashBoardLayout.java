@@ -2,11 +2,14 @@ package com.example.driverside;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +25,13 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.driverside.Model.ActiveUser;
 import com.example.driverside.Model.Registration;
 import com.example.driverside.Model.UserRequest;
@@ -37,6 +47,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DashBoardLayout extends AppCompatActivity implements View.OnClickListener{
 
@@ -64,8 +80,7 @@ public class DashBoardLayout extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_dash_board);
 
         complete = findViewById(R.id.complete);
-
-
+        checkGPSStatus();
         mProgress1 = new ProgressDialog(DashBoardLayout.this);
         database = FirebaseDatabase.getInstance();
         availability = findViewById(R.id.availablityy);
@@ -222,7 +237,35 @@ public class DashBoardLayout extends AppCompatActivity implements View.OnClickLi
 
 
     public void open(final String RescuerType){
-        Log.d(TAG, "check point open");
+            LocationManager locationManager = null;
+            boolean gps_enabled = false;
+            boolean network_enabled = false;
+            if ( locationManager == null ) {
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            }
+            try {
+                gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            } catch (Exception ex){}
+            try {
+                network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            } catch (Exception ex){}
+            if ( !gps_enabled && !network_enabled ){
+                android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(DashBoardLayout.this);
+                dialog.setMessage("GPS not enabled");
+                dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //this will navigate user to the device location settings screen
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
+                android.app.AlertDialog alert = dialog.create();
+                alert.show();
+            }else {
+
+
         Toast.makeText(DashBoardLayout.this,""+RescuerType,Toast.LENGTH_LONG).show();
         Log.d(TAG, "open: email"+email);
         Log.d(TAG, "open: email"+subEmail);
@@ -242,6 +285,7 @@ public class DashBoardLayout extends AppCompatActivity implements View.OnClickLi
                             rescuerType = RescuerType;
                             Intent intent = new Intent(DashBoardLayout.this,MapsActivity.class);
                             intent.putExtra("rescuer",rescuerType);
+                            intent.putExtra("availableStatus",availableStatus);
                             startActivity(intent);
                             //        DashBoardLayout.this.getSharedPreferences("YOUR_PREFS", 0).edit().clear().commit();
                             //finish();
@@ -262,15 +306,15 @@ public class DashBoardLayout extends AppCompatActivity implements View.OnClickLi
         }else {
             Log.d(TAG, "check point not available");
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage("Make me available as "+RescuerType);
+            alertDialogBuilder.setMessage("Make me available as " + RescuerType);
             alertDialogBuilder.setPositiveButton("yes",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
                             rescuerType = RescuerType;
-                            Intent intent = new Intent(DashBoardLayout.this,MapsActivity.class);
-                            intent.putExtra("rescuer",rescuerType);
-                            intent.putExtra("availableStatus",availableStatus);
+                            Intent intent = new Intent(DashBoardLayout.this, MapsActivity.class);
+                            intent.putExtra("rescuer", rescuerType);
+                            intent.putExtra("availableStatus", availableStatus);
                             startActivity(intent);
 
                         }
@@ -285,7 +329,7 @@ public class DashBoardLayout extends AppCompatActivity implements View.OnClickLi
 
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
-
+        }
         }
     }
 
@@ -295,7 +339,7 @@ public class DashBoardLayout extends AppCompatActivity implements View.OnClickLi
 
     protected void makeCall() {
 
-        Intent callIntent = new Intent(Intent.ACTION_CALL);
+         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse(phoneNumber));
 
         if (ContextCompat.checkSelfPermission(DashBoardLayout.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -452,4 +496,97 @@ public class DashBoardLayout extends AppCompatActivity implements View.OnClickLi
         alert.show();
     }
 
+    private void checkGPSStatus() {
+        LocationManager locationManager = null;
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+        if ( locationManager == null ) {
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        }
+        try {
+            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex){}
+        try {
+            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch (Exception ex){}
+        if ( !gps_enabled && !network_enabled ){
+            android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(DashBoardLayout.this);
+            dialog.setMessage("GPS not enabled");
+            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //this will navigate user to the device location settings screen
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            });
+            android.app.AlertDialog alert = dialog.create();
+            alert.show();
+        }
+    }
+
+    private void sendFCMPush() {
+
+        final String Legacy_SERVER_KEY = "AAAANP5gGHA:APA91bFwye7sitBprCkqgXENmgMhsSdudtRmB4u6yqObSbSUP90SOIMpEGsY24tnpkGH7p7QEvI8g6oJhO3vC6QAEo0ksMz8j9adOeckLM6egaws-rmcSaTdPmNHAHPTw04aX4AJp6yW";
+        String msg = "you are selected for rescue service. Please go to your map to view your destination";
+        String title = "Rescue request";
+        String token = "fz4ZfeHDRHGMtVGzKYwr7A:APA91bGOOmrcM6saksXSv34ybsXz7OIW5tXYSaoP9AS0xeSAgsiU6gw3ThfPn1hTOzsAwUenbGX4tk6DFZFcCABj-WYJu0MrRgoCLyzgBjviXno9CNEEEaEl1x3I3azd92GiyEKBlnKm";
+
+        JSONObject obj = null;
+        JSONObject objData = null;
+        JSONObject dataobjData = null;
+
+        try {
+            obj = new JSONObject();
+            objData = new JSONObject();
+
+            objData.put("body", msg);
+            objData.put("title", title);
+//            objData.put("sound",);
+            objData.put("icon", R.mipmap.ambulance_small); //   icon_name image must be there in drawable
+            objData.put("tag", token);
+            objData.put("priority", "high");
+
+            dataobjData = new JSONObject();
+            dataobjData.put("text", msg);
+            dataobjData.put("title", title);
+
+            obj.put("to", token);
+            //obj.put("priority", "high");
+
+            obj.put("notification", objData);
+            obj.put("data", dataobjData);
+            Log.e("!_@rj@_@@_PASS:>", obj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST, "https://fcm.googleapis.com/fcm/send", obj,
+                new com.android.volley.Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e("!_@@_SUCESS", response + "");
+                    }
+                },
+                new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("!_@@_Errors--", error + "");
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "key=" + Legacy_SERVER_KEY);
+                params.put("Content-Type", "application/json");
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        int socketTimeout = 1000 * 60;// 60 seconds
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        jsObjRequest.setRetryPolicy(policy);
+        requestQueue.add(jsObjRequest);
+    }
 }

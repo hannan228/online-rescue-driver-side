@@ -62,7 +62,7 @@ public class LoginScreen extends AppCompatActivity {
                     startActivity(new Intent(LoginScreen.this,DashBoardLayout.class));
                     finish();
                 } else {
-                    Toast.makeText(LoginScreen.this, "Signed in or register first", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginScreen.this, "Sig in or register first", Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -84,9 +84,10 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final String email = mEmail.getText().toString();
+                String email = mEmail.getText().toString();
                 final String password = mPassword.getText().toString();
                 if (email != null && password != null) {
+                    email = "res"+email;
                     if(!TextUtils.isEmpty(mEmail.getText().toString())
                             && !TextUtils.isEmpty(mPassword.getText().toString())){
                     mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginScreen.this, new OnCompleteListener<AuthResult>() {
